@@ -1,17 +1,18 @@
 import { ApplicationConfig, inject, provideAppInitializer, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { LogLevel, OidcSecurityService, provideAuth } from 'angular-auth-oidc-client';
 
 import { routes } from './app.routes';
 import { APP_CONFIG } from './config/app-config';
+import { authInterceptor } from './auth/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([authInterceptor])),
     provideAuth({
       config: {
         authority: APP_CONFIG.cognitoAuthority,

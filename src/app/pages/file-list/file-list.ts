@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { FileItem } from '../../models/file-item';
+import { FileService } from '../../services/file.service';
 
 @Component({
   selector: 'app-file-list',
@@ -8,41 +9,25 @@ import { FileItem } from '../../models/file-item';
   templateUrl: './file-list.html',
   styleUrl: './file-list.css',
 })
-export class FileList {
-  files: FileItem[] = [
-    {
-      fileId: '1',
-      fileName: 'relatorio-marco.pdf',
-      status: 'COMPLETED',
-      sizeInBytes: 10240,
-      uploadDate: '2026-03-26T14:30:00Z',
-      updatedAt: '2026-03-26T14:32:15Z',
-    },
-    {
-      fileId: '2',
-      fileName: 'foto-equipe.png',
-      status: 'PROCESSING',
-      sizeInBytes: 2048000,
-      uploadDate: '2026-03-27T09:10:00Z',
-      updatedAt: '2026-03-27T09:10:20Z',
-    },
-    {
-      fileId: '3',
-      fileName: 'contrato.docx',
-      status: 'PENDING',
-      sizeInBytes: 51200,
-      uploadDate: '2026-03-27T10:00:00Z',
-      updatedAt: '2026-03-27T10:00:00Z',
-    },
-    {
-      fileId: '4',
-      fileName: 'dados.csv',
-      status: 'FAILED',
-      sizeInBytes: 987654,
-      uploadDate: '2026-03-27T11:45:00Z',
-      updatedAt: '2026-03-27T11:46:30Z',
-    },
-  ];
+export class FileList implements OnInit {
+  private readonly fileService = inject(FileService);
+
+  files = signal<FileItem[]>([]);
+  loading = signal(true);
+  error = signal<string | null>(null);
+
+  ngOnInit(): void {
+    this.fileService.list().subscribe({
+      next: (files) => {
+        this.files.set(files);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.error.set('Não foi possível carregar os arquivos.');
+        this.loading.set(false);
+      },
+    });
+  }
 
   formatSize(bytes: number): string {
     if (bytes < 1024 * 1024) {

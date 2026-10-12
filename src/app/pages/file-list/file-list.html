@@ -1,30 +1,38 @@
 <main class="container">
   <h1>Meus arquivos</h1>
 
-  <table>
-    <thead>
-      <tr>
-        <th>Nome</th>
-        <th>Status</th>
-        <th>Tamanho</th>
-        <th>Enviado em</th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (file of files; track file.fileId) {
+  @if (loading()) {
+    <p>Carregando...</p>
+  } @else if (error()) {
+    <p class="error">{{ error() }}</p>
+  } @else {
+    <table>
+      <thead>
         <tr>
-          <td>{{ file.fileName }}</td>
-          <td>
-            <span [class]="'badge ' + file.status.toLowerCase()">{{ file.status }}</span>
-          </td>
-          <td>{{ formatSize(file.sizeInBytes) }}</td>
-          <td>{{ file.uploadDate | date: 'dd/MM/yyyy HH:mm' }}</td>
+          <th>Nome</th>
+          <th>Tipo</th>
+          <th>Status</th>
+          <th>Tamanho</th>
+          <th>Enviado em</th>
         </tr>
-      } @empty {
-        <tr>
-          <td colspan="4">Nenhum arquivo enviado ainda.</td>
-        </tr>
-      }
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        @for (file of files(); track file.uploadId) {
+          <tr>
+            <td>{{ file.fileName }}</td>
+            <td>{{ file.fileType }}</td>
+            <td>
+              <span [class]="'badge ' + file.status.toLowerCase()">{{ file.status }}</span>
+            </td>
+            <td>{{ formatSize(file.fileSize) }}</td>
+            <td>{{ file.uploadDate | date: 'dd/MM/yyyy HH:mm' }}</td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="5">Nenhum arquivo enviado ainda.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
 </main>
