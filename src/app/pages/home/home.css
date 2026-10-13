@@ -1,20 +1,35 @@
 .container {
   max-width: 960px;
-  margin: 2rem auto;
-  padding: 0 1rem 3rem;
-  font-family: system-ui, sans-serif;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
 }
 
+/* Gradient banner */
 .hero {
   margin-bottom: 2.5rem;
+  padding: 2rem 1.5rem;
+  border-radius: 24px;
+  background: var(--app-gradient-hero);
+  color: #fff;
+  box-shadow: 0 10px 30px var(--app-shadow);
+}
+
+.hero h1 {
+  margin: 0 0 0.75rem;
+  color: #fff;
 }
 
 .lead {
   max-width: 62ch;
-  margin-bottom: 1.5rem;
-  color: #4b5563;
+  margin: 0 0 1.5rem;
+  color: rgba(255, 255, 255, 0.9);
   font-size: 1.1rem;
   line-height: 1.6;
+}
+
+.hero a[mat-flat-button] {
+  background: #fff;
+  color: var(--mat-sys-primary);
 }
 
 .steps {
@@ -23,9 +38,22 @@
   gap: 1rem;
 }
 
+/* Icon inside a tinted rounded square */
+.step-icon,
+.highlight mat-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: var(--mat-sys-primary-container);
+  color: var(--mat-sys-primary);
+}
+
 .step-icon {
-  margin-bottom: 0.5rem;
-  color: #2563eb;
+  margin-bottom: 0.75rem;
 }
 
 .steps h3 {
@@ -49,10 +77,6 @@
   display: flex;
   align-items: flex-start;
   gap: 0.75rem;
-}
-
-.highlight mat-icon {
-  color: #2563eb;
 }
 
 .highlight p {
