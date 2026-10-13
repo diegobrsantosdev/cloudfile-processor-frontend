@@ -115,6 +115,38 @@
             <td mat-cell *matCellDef="let file">{{ file.uploadDate | date: 'MMM d, y, HH:mm' }}</td>
           </ng-container>
 
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef class="actions-col">Actions</th>
+            <td mat-cell *matCellDef="let file" class="actions-col">
+              <div class="row-actions">
+                <span [matTooltip]="downloadHint(file)">
+                  <button
+                    mat-icon-button
+                    type="button"
+                    [attr.aria-label]="'Download ' + file.fileName"
+                    [disabled]="!canDownload(file) || busyId() === file.uploadId"
+                    (click)="download(file)"
+                  >
+                    <mat-icon>download</mat-icon>
+                  </button>
+                </span>
+
+                <span [matTooltip]="deleteHint(file)">
+                  <button
+                    mat-icon-button
+                    type="button"
+                    class="delete-btn"
+                    [attr.aria-label]="'Delete ' + file.fileName"
+                    [disabled]="!canDelete(file) || busyId() === file.uploadId"
+                    (click)="confirmDelete(file)"
+                  >
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </span>
+              </div>
+            </td>
+          </ng-container>
+
           <tr mat-header-row *matHeaderRowDef="columns"></tr>
           <tr mat-row *matRowDef="let row; columns: columns"></tr>
 

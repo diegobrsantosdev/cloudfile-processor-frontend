@@ -184,6 +184,23 @@ table {
   word-break: break-word;
 }
 
+/* Row actions (download / delete) */
+.actions-col {
+  width: 1%;
+  white-space: nowrap;
+  text-align: right;
+}
+
+.row-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.25rem;
+}
+
+.delete-btn:not(:disabled) {
+  color: #b42318;
+}
+
 .empty {
   padding: 2rem 1rem;
   text-align: center;

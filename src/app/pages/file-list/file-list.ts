@@ -9,7 +9,12 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { interval } from 'rxjs';
+import {
+  ConfirmDialog,
+  ConfirmDialogData,
+} from '../../components/confirm-dialog/confirm-dialog';
 import { UploadConfirmDialog } from '../../components/upload-confirm-dialog/upload-confirm-dialog';
 import { FileItem, FileStatus } from '../../models/file-item';
 import { FileService } from '../../services/file.service';
@@ -35,6 +40,7 @@ const STATUS_HELP: Record<FileStatus, string> = {
     MatProgressBarModule,
     MatSortModule,
     MatTableModule,
+    MatTooltipModule,
   ],
   templateUrl: './file-list.html',
   styleUrl: './file-list.css',
@@ -49,7 +55,14 @@ export class FileList implements OnInit {
   private pollingUntil = 0;
 
   protected readonly statusHelp = STATUS_HELP;
-  protected readonly columns = ['fileName', 'fileType', 'status', 'fileSize', 'uploadDate'];
+  protected readonly columns = [
+    'fileName',
+    'fileType',
+    'status',
+    'fileSize',
+    'uploadDate',
+    'actions',
+  ];
 
   files = signal<FileItem[]>([]);
   loading = signal(true);
@@ -61,6 +74,9 @@ export class FileList implements OnInit {
   uploading = signal(false);
   uploadProgress = signal(0);
   uploadingName = signal('');
+
+  // Id of the file with a download or delete in progress
+  busyId = signal<string | null>(null);
 
   // True while at least one file is still being processed
   hasInProgress = computed(() =>
@@ -163,6 +179,41 @@ export class FileList implements OnInit {
       });
   }
 
+  download(file: FileItem): void {
+    this.busyId.set(file.uploadId);
+
+    this.fileService.getDownloadUrl(file.uploadId).subscribe({
+      next: (url) => {
+        this.busyId.set(null);
+        window.open(url, '_blank', 'noopener');
+      },
+      error: () => {
+        this.busyId.set(null);
+        this.snackBar.open("We couldn't prepare the download. Please try again.", 'OK', {
+          duration: 6000,
+        });
+      },
+    });
+  }
+
+  confirmDelete(file: FileItem): void {
+    const data: ConfirmDialogData = {
+      title: 'Delete this file?',
+      message: `"${file.fileName}" will be permanently deleted. This can't be undone.`,
+      confirmLabel: 'Delete',
+      destructive: true,
+    };
+
+    this.dialog
+      .open(ConfirmDialog, { width: '420px', data })
+      .afterClosed()
+      .subscribe((confirmed?: boolean) => {
+        if (confirmed) {
+          this.delete(file);
+        }
+      });
+  }
+
   retry(): void {
     this.loading.set(true);
     this.loadFiles();
@@ -180,11 +231,26 @@ export class FileList implements OnInit {
     }
     return (bytes / 1024 ** 3).toFixed(2) + ' GB';
   }
-  
-    protected helpFor(status: FileStatus): string {
+
+  protected helpFor(status: FileStatus): string {
     return STATUS_HELP[status];
   }
 
+  protected canDownload(file: FileItem): boolean {
+    return file.status === 'COMPLETED';
+  }
+
+  protected canDelete(file: FileItem): boolean {
+    return file.status !== 'PROCESSING' && file.status !== 'DELETED';
+  }
+
+  protected downloadHint(file: FileItem): string {
+    return this.canDownload(file) ? 'Download' : 'Available once processing is complete';
+  }
+
+  protected deleteHint(file: FileItem): string {
+    return this.canDelete(file) ? 'Delete' : "Can't delete while the file is being processed";
+  }
 
   private upload(file: File): void {
     this.uploading.set(true);
@@ -204,6 +270,24 @@ export class FileList implements OnInit {
       error: () => {
         this.uploading.set(false);
         this.snackBar.open('Upload failed. Check your connection and try again.', 'OK', {
+          duration: 6000,
+        });
+      },
+    });
+  }
+
+  private delete(file: FileItem): void {
+    this.busyId.set(file.uploadId);
+
+    this.fileService.delete(file.uploadId).subscribe({
+      next: () => {
+        this.busyId.set(null);
+        this.files.update((list) => list.filter((f) => f.uploadId !== file.uploadId));
+        this.snackBar.open(`"${file.fileName}" was deleted.`, 'OK', { duration: 4000 });
+      },
+      error: () => {
+        this.busyId.set(null);
+        this.snackBar.open("We couldn't delete this file. Please try again.", 'OK', {
           duration: 6000,
         });
       },
