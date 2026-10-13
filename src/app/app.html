@@ -1,5 +1,27 @@
-<header class="topbar">
-  <strong>CloudFile Processor</strong>
-  <button type="button" (click)="logout()">Sair</button>
-</header>
+<mat-toolbar class="topbar">
+  <a routerLink="/" class="brand">
+    <mat-icon>cloud</mat-icon>
+    <span>CloudFile Processor</span>
+  </a>
+
+  <nav class="nav">
+    <a mat-button routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      Home
+    </a>
+    <a mat-button routerLink="/files" routerLinkActive="active">My files</a>
+  </nav>
+
+  <span class="spacer"></span>
+
+  <button mat-stroked-button type="button" (click)="logout()">
+    <mat-icon>logout</mat-icon>
+    Sign out
+  </button>
+</mat-toolbar>
+
 <router-outlet />
+
+<footer class="footer">
+  <span>© {{ year }} CloudFile Processor</span>
+  <a routerLink="/about">How it's built</a>
+</footer>

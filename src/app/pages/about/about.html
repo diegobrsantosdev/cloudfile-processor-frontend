@@ -1,0 +1,46 @@
+<main class="container">
+  <h1>How it's built</h1>
+  <p class="lead">
+    CloudFile Processor is a cloud-native system: a Java and Spring Boot backend running on AWS,
+    plus this Angular web app.
+  </p>
+
+  <h2>Architecture</h2>
+  <ul>
+    <li>
+      <strong>Direct uploads.</strong> The browser sends files straight to Amazon S3 using
+      short-lived pre-signed URLs, so files never pass through the API.
+    </li>
+    <li>
+      <strong>Asynchronous processing.</strong> Upload events feed an Amazon SQS queue, and a
+      worker service on ECS Fargate processes each file, with retries and a dead-letter queue for
+      failures.
+    </li>
+    <li>
+      <strong>Metadata in DynamoDB,</strong> with a full status lifecycle: Pending, Processing,
+      Completed, Failed and Deleted.
+    </li>
+    <li>
+      <strong>Authentication with Amazon Cognito</strong> (OpenID Connect, Authorization Code with
+      PKCE). The API validates the JWT, and every query is scoped to the signed-in user.
+    </li>
+    <li>
+      <strong>Infrastructure as code</strong> with AWS CloudFormation, deployed through GitHub
+      Actions.
+    </li>
+  </ul>
+
+  <h2>Tech stack</h2>
+  <div class="tags">
+    @for (item of stack; track item) {
+      <span class="tag">{{ item }}</span>
+    }
+  </div>
+
+  <h2>Source code</h2>
+  <p>
+    <a [href]="backendRepo" target="_blank" rel="noopener">Backend on GitHub</a>
+    ·
+    <a [href]="frontendRepo" target="_blank" rel="noopener">Frontend on GitHub</a>
+  </p>
+</main>
