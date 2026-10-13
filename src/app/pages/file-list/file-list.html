@@ -1,19 +1,75 @@
 <main class="container">
-  <h1>Meus arquivos</h1>
+  <h1>My files</h1>
+  <p class="subtitle">
+    Upload files and follow their progress here. Everything you send is listed below and updates
+    automatically, so there's no need to refresh the page.
+  </p>
+
+  <mat-card appearance="outlined" class="upload-card">
+    <mat-card-content>
+      <h2>Upload a file</h2>
+      <p>
+        Choose a file from your computer. Before anything is sent, you'll be asked to confirm.
+      </p>
+      <ul>
+        <li>Large files are welcome: up to <strong>5 GB</strong> per file.</li>
+        <li>
+          Your file goes straight to secure cloud storage (Amazon S3) and is then processed in the
+          background.
+        </li>
+        <li>Keep this tab open until the upload reaches 100%.</li>
+      </ul>
+
+      <div class="actions">
+        <input #fileInput type="file" hidden (change)="onFileSelected($event)" />
+        <button mat-flat-button type="button" (click)="fileInput.click()" [disabled]="uploading()">
+          <mat-icon>upload_file</mat-icon>
+          Choose a file
+        </button>
+      </div>
+
+      @if (uploading()) {
+        <div class="progress">
+          <p>
+            Uploading <strong>{{ uploadingName() }}</strong>… {{ uploadProgress() }}%
+          </p>
+          <mat-progress-bar mode="determinate" [value]="uploadProgress()" />
+          <p class="hint">Please keep this tab open until the upload reaches 100%.</p>
+        </div>
+      }
+    </mat-card-content>
+  </mat-card>
 
   @if (loading()) {
-    <p>Carregando...</p>
+    <p>Loading your files...</p>
   } @else if (error()) {
     <p class="error">{{ error() }}</p>
+    <button mat-stroked-button type="button" (click)="retry()">Try again</button>
   } @else {
+    <h2>Your files ({{ files().length }})</h2>
+
+    <details class="legend">
+      <summary>What do the statuses mean?</summary>
+      <dl>
+        <dt><span class="badge pending">PENDING</span></dt>
+        <dd>{{ statusHelp.PENDING }}</dd>
+        <dt><span class="badge processing">PROCESSING</span></dt>
+        <dd>{{ statusHelp.PROCESSING }}</dd>
+        <dt><span class="badge completed">COMPLETED</span></dt>
+        <dd>{{ statusHelp.COMPLETED }}</dd>
+        <dt><span class="badge failed">FAILED</span></dt>
+        <dd>{{ statusHelp.FAILED }}</dd>
+      </dl>
+    </details>
+
     <table>
       <thead>
         <tr>
-          <th>Nome</th>
-          <th>Tipo</th>
+          <th>Name</th>
+          <th>Type</th>
           <th>Status</th>
-          <th>Tamanho</th>
-          <th>Enviado em</th>
+          <th>Size</th>
+          <th>Uploaded</th>
         </tr>
       </thead>
       <tbody>
@@ -22,14 +78,18 @@
             <td>{{ file.fileName }}</td>
             <td>{{ file.fileType }}</td>
             <td>
-              <span [class]="'badge ' + file.status.toLowerCase()">{{ file.status }}</span>
+              <span [class]="'badge ' + file.status.toLowerCase()" [title]="statusHelp[file.status]">
+                {{ file.status }}
+              </span>
             </td>
             <td>{{ formatSize(file.fileSize) }}</td>
-            <td>{{ file.uploadDate | date: 'dd/MM/yyyy HH:mm' }}</td>
+            <td>{{ file.uploadDate | date: 'MMM d, y, HH:mm' }}</td>
           </tr>
         } @empty {
           <tr>
-            <td colspan="5">Nenhum arquivo enviado ainda.</td>
+            <td colspan="5" class="empty">
+              You haven't uploaded anything yet. Use "Choose a file" above to send your first one.
+            </td>
           </tr>
         }
       </tbody>

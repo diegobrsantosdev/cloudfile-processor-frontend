@@ -1,8 +1,64 @@
 .container {
-  max-width: 900px;
+  max-width: 960px;
   margin: 2rem auto;
-  padding: 0 1rem;
+  padding: 0 1rem 3rem;
   font-family: system-ui, sans-serif;
+}
+
+.subtitle {
+  max-width: 60ch;
+  margin-top: -0.5rem;
+  color: #4b5563;
+  line-height: 1.5;
+}
+
+.upload-card {
+  margin: 1.5rem 0 2rem;
+}
+
+.upload-card h2 {
+  margin-top: 0;
+}
+
+.upload-card ul {
+  padding-left: 1.2rem;
+  line-height: 1.7;
+  color: #374151;
+}
+
+.actions {
+  margin-top: 1rem;
+}
+
+.progress {
+  margin-top: 1.25rem;
+}
+
+.hint {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.legend {
+  margin: 0.5rem 0 1rem;
+  color: #374151;
+}
+
+.legend summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.legend dl {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  align-items: center;
+  gap: 0.6rem 1rem;
+  margin: 0.75rem 0 0;
+}
+
+.legend dd {
+  margin: 0;
 }
 
 table {
@@ -17,6 +73,16 @@ td {
   border-bottom: 1px solid #e5e7eb;
 }
 
+.empty {
+  padding: 2rem 1rem;
+  text-align: center;
+  color: #6b7280;
+}
+
+.error {
+  color: #991b1b;
+}
+
 .badge {
   padding: 0.2rem 0.6rem;
   border-radius: 999px;
@@ -29,7 +95,3 @@ td {
 .completed { background: #d1fae5; color: #065f46; }
 .failed { background: #fee2e2; color: #991b1b; }
 .deleted { background: #e5e7eb; color: #374151; }
-
-.error {
-  color: #991b1b;
-}
