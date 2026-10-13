@@ -4,9 +4,7 @@ import { DatePipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSortModule, Sort } from '@angular/material/sort';
@@ -33,9 +31,7 @@ const STATUS_HELP: Record<FileStatus, string> = {
     DatePipe,
     MatButtonModule,
     MatCardModule,
-    MatFormFieldModule,
     MatIconModule,
-    MatInputModule,
     MatProgressBarModule,
     MatSortModule,
     MatTableModule,
@@ -184,6 +180,11 @@ export class FileList implements OnInit {
     }
     return (bytes / 1024 ** 3).toFixed(2) + ' GB';
   }
+  
+    protected helpFor(status: FileStatus): string {
+    return STATUS_HELP[status];
+  }
+
 
   private upload(file: File): void {
     this.uploading.set(true);

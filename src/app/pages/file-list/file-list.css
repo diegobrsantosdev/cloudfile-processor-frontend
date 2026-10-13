@@ -1,8 +1,7 @@
 .container {
   max-width: 960px;
-  margin: 2rem auto;
-  padding: 0 1rem 3rem;
-  font-family: system-ui, sans-serif;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
 }
 
 .subtitle {
@@ -12,6 +11,7 @@
   line-height: 1.5;
 }
 
+/* ---- Upload card ---- */
 .upload-card {
   margin: 1.5rem 0 2rem;
 }
@@ -39,14 +39,109 @@
   color: #6b7280;
 }
 
+/* ---- Files panel ---- */
+.files-panel {
+  overflow: hidden;
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: 20px;
+  background: var(--mat-sys-surface);
+  box-shadow:
+    0 1px 2px rgba(16, 24, 40, 0.04),
+    0 8px 24px rgba(16, 24, 40, 0.06);
+}
+
+/* Tinted header strip: title, counter and search */
+.panel-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: color-mix(in srgb, var(--mat-sys-primary) 10%, white);
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+}
+
+.panel-header h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0;
+  color: var(--mat-sys-on-primary-container);
+}
+
+.count {
+  padding: 0.1rem 0.65rem;
+  border-radius: 999px;
+  background: var(--mat-sys-primary);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* Pill-shaped search field */
+.search {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 360px;
+  height: 48px;
+  padding: 0 1rem;
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: 999px;
+  background: #fff;
+}
+
+.search:focus-within {
+  border-color: var(--mat-sys-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--mat-sys-primary) 20%, transparent);
+}
+
+.search mat-icon {
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.search input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+
+/* Statuses legend as a soft info box */
 .legend {
-  margin: 0.5rem 0 1rem;
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+  background: color-mix(in srgb, var(--mat-sys-primary) 4%, white);
   color: #374151;
 }
 
 .legend summary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  list-style: none;
   cursor: pointer;
   font-weight: 600;
+  color: var(--mat-sys-primary);
+}
+
+.legend summary::-webkit-details-marker {
+  display: none;
+}
+
+.legend summary .chevron {
+  margin-left: auto;
+  transition: transform 0.2s ease;
+}
+
+.legend[open] summary .chevron {
+  transform: rotate(180deg);
 }
 
 .legend dl {
@@ -54,23 +149,39 @@
   grid-template-columns: max-content 1fr;
   align-items: center;
   gap: 0.6rem 1rem;
-  margin: 0.75rem 0 0;
+  margin: 0;
+  padding: 0 1.25rem 1rem;
 }
 
 .legend dd {
   margin: 0;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
+/* ---- Table ---- */
+.table-wrap {
+  overflow-x: auto;
 }
 
-th,
-td {
-  text-align: left;
-  padding: 0.75rem;
-  border-bottom: 1px solid #e5e7eb;
+table {
+  width: 100%;
+}
+
+.table-wrap th {
+  background: color-mix(in srgb, var(--mat-sys-primary) 5%, white);
+  color: var(--mat-sys-on-primary-container);
+  font-weight: 600;
+}
+
+.table-wrap tr[mat-row]:nth-child(even) {
+  background: #fafbff;
+}
+
+.table-wrap tr[mat-row]:hover {
+  background: color-mix(in srgb, var(--mat-sys-primary) 8%, white);
+}
+
+.name-cell {
+  word-break: break-word;
 }
 
 .empty {
@@ -83,6 +194,7 @@ td {
   color: #991b1b;
 }
 
+/* ---- Status badges ---- */
 .badge {
   padding: 0.2rem 0.6rem;
   border-radius: 999px;
@@ -96,7 +208,25 @@ td {
 .failed { background: #fee2e2; color: #991b1b; }
 .deleted { background: #e5e7eb; color: #374151; }
 
-.search {
-  width: 100%;
-  max-width: 360px;
+/* ---- Small screens ---- */
+@media (max-width: 600px) {
+  .hide-sm {
+    display: none;
+  }
+
+  .panel-header {
+    padding: 0.85rem 1rem;
+  }
+
+  .search {
+    max-width: none;
+  }
+
+  .legend summary {
+    padding: 0.75rem 1rem;
+  }
+
+  .legend dl {
+    padding: 0 1rem 1rem;
+  }
 }
