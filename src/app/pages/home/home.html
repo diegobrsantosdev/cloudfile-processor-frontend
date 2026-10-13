@@ -1,0 +1,40 @@
+<main class="container">
+  <section class="hero">
+    <h1>Welcome to CloudFile Processor</h1>
+    <p class="lead">
+      Send files of any kind, up to 5 GB each, and keep track of them in one place. Upload, follow
+      the progress, and check the status of every file whenever you like.
+    </p>
+    <a mat-flat-button routerLink="/files">
+      <mat-icon>folder_open</mat-icon>
+      Go to my files
+    </a>
+  </section>
+
+  <section>
+    <h2>How it works</h2>
+    <div class="steps">
+      @for (step of steps; track step.title; let i = $index) {
+        <mat-card appearance="outlined">
+          <mat-card-content>
+            <mat-icon class="step-icon">{{ step.icon }}</mat-icon>
+            <h3>{{ i + 1 }}. {{ step.title }}</h3>
+            <p>{{ step.text }}</p>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+  </section>
+
+  <section class="highlights">
+    @for (item of highlights; track item.title) {
+      <div class="highlight">
+        <mat-icon>{{ item.icon }}</mat-icon>
+        <div>
+          <strong>{{ item.title }}</strong>
+          <p>{{ item.text }}</p>
+        </div>
+      </div>
+    }
+  </section>
+</main>

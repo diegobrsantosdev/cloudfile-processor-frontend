@@ -1,0 +1,62 @@
+.container {
+  max-width: 960px;
+  margin: 2rem auto;
+  padding: 0 1rem 3rem;
+  font-family: system-ui, sans-serif;
+}
+
+.hero {
+  margin-bottom: 2.5rem;
+}
+
+.lead {
+  max-width: 62ch;
+  margin-bottom: 1.5rem;
+  color: #4b5563;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.step-icon {
+  margin-bottom: 0.5rem;
+  color: #2563eb;
+}
+
+.steps h3 {
+  margin: 0 0 0.5rem;
+}
+
+.steps p {
+  margin: 0;
+  color: #374151;
+  line-height: 1.5;
+}
+
+.highlights {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+
+.highlight {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.highlight mat-icon {
+  color: #2563eb;
+}
+
+.highlight p {
+  margin: 0.25rem 0 0;
+  color: #4b5563;
+  line-height: 1.5;
+}
