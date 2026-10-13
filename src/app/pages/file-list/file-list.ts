@@ -135,7 +135,7 @@ export class FileList implements OnInit {
       next: (progress) => this.uploadProgress.set(progress),
       complete: () => {
         this.uploading.set(false);
-        this.snackBar.open('Upload complete! Your file is now in the processing queue.', 'OK', {
+        this.snackBar.open(`"${file.name}" uploaded successfully.`, 'OK', {
           duration: 5000,
         });
         this.pollingUntil = Date.now() + 60_000; // check the list for 60s

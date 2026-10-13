@@ -24,7 +24,7 @@ export interface UploadConfirmData {
         </div>
       </div>
 
-      <p class="note">It will be sent to secure cloud storage and processed in the background.</p>
+      <p class="note">It will be uploaded securely and processed automatically.</p>
     </mat-dialog-content>
 
     <mat-dialog-actions align="end">
