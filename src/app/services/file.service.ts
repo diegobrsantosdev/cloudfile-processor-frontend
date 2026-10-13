@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Observable, switchMap } from 'rxjs';
+import { map, Observable, switchMap } from 'rxjs';
 import { APP_CONFIG } from '../config/app-config';
-import { FileItem } from '../models/file-item';
+import { FileDownloadResponse, FileItem } from '../models/file-item';
 import { FileUploadRequest, FileUploadResponse } from '../models/file-upload';
 
 @Injectable({ providedIn: 'root' })
@@ -12,6 +12,17 @@ export class FileService {
 
   list(): Observable<FileItem[]> {
     return this.http.get<FileItem[]>(`${this.baseUrl}/files`);
+  }
+
+   /** Asks the API for a temporary download link for a file. */
+  getDownloadUrl(fileId: string): Observable<string> {
+    return this.http
+      .get<FileDownloadResponse>(`${this.baseUrl}/files/${fileId}`)
+      .pipe(map((res) => res.preSignedUrl));
+  }
+
+  delete(fileId: string): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/files/${fileId}`);
   }
 
   /** Emits the upload progress (0-100) and completes when the file has been stored. */

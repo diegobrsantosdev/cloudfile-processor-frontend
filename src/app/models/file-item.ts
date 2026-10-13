@@ -9,3 +9,9 @@ export interface FileItem {
   uploadDate: string;
   status: FileStatus;
 }
+
+export interface FileDownloadResponse {
+  fileId: string;
+  fileName: string;
+  preSignedUrl: string;
+}
