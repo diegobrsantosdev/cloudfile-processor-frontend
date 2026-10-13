@@ -95,3 +95,8 @@ td {
 .completed { background: #d1fae5; color: #065f46; }
 .failed { background: #fee2e2; color: #991b1b; }
 .deleted { background: #e5e7eb; color: #374151; }
+
+.search {
+  width: 100%;
+  max-width: 360px;
+}

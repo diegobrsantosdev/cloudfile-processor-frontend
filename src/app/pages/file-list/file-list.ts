@@ -4,9 +4,13 @@ import { DatePipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSortModule, Sort } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
 import { interval } from 'rxjs';
 import { UploadConfirmDialog } from '../../components/upload-confirm-dialog/upload-confirm-dialog';
 import { FileItem, FileStatus } from '../../models/file-item';
@@ -25,7 +29,17 @@ const STATUS_HELP: Record<FileStatus, string> = {
 
 @Component({
   selector: 'app-file-list',
-  imports: [DatePipe, MatButtonModule, MatCardModule, MatIconModule, MatProgressBarModule],
+  imports: [
+    DatePipe,
+    MatButtonModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    MatProgressBarModule,
+    MatSortModule,
+    MatTableModule,
+  ],
   templateUrl: './file-list.html',
   styleUrl: './file-list.css',
 })
@@ -39,10 +53,14 @@ export class FileList implements OnInit {
   private pollingUntil = 0;
 
   protected readonly statusHelp = STATUS_HELP;
+  protected readonly columns = ['fileName', 'fileType', 'status', 'fileSize', 'uploadDate'];
 
   files = signal<FileItem[]>([]);
   loading = signal(true);
   error = signal<string | null>(null);
+
+  search = signal('');
+  sort = signal<Sort>({ active: 'uploadDate', direction: 'desc' });
 
   uploading = signal(false);
   uploadProgress = signal(0);
@@ -52,6 +70,39 @@ export class FileList implements OnInit {
   hasInProgress = computed(() =>
     this.files().some((f) => f.status === 'PENDING' || f.status === 'PROCESSING'),
   );
+
+  // Files after applying the search term and the chosen sort order
+  rows = computed(() => {
+    const term = this.search().trim().toLowerCase();
+    const { active, direction } = this.sort();
+
+    const filtered = this.files().filter((f) => f.fileName.toLowerCase().includes(term));
+    if (!direction) {
+      return filtered;
+    }
+
+    const dir = direction === 'asc' ? 1 : -1;
+    const valueOf = (f: FileItem): string | number => {
+      switch (active) {
+        case 'fileName':
+          return f.fileName.toLowerCase();
+        case 'fileType':
+          return f.fileType.toLowerCase();
+        case 'status':
+          return f.status;
+        case 'fileSize':
+          return f.fileSize;
+        default:
+          return f.uploadDate;
+      }
+    };
+
+    return [...filtered].sort((a, b) => {
+      const x = valueOf(a);
+      const y = valueOf(b);
+      return x < y ? -dir : x > y ? dir : 0;
+    });
+  });
 
   ngOnInit(): void {
     this.loadFiles();
@@ -71,6 +122,14 @@ export class FileList implements OnInit {
     if (this.uploading()) {
       event.preventDefault();
     }
+  }
+
+  onSearch(event: Event): void {
+    this.search.set((event.target as HTMLInputElement).value);
+  }
+
+  onSort(sort: Sort): void {
+    this.sort.set(sort);
   }
 
   onFileSelected(event: Event): void {
@@ -153,8 +212,7 @@ export class FileList implements OnInit {
   private loadFiles(): void {
     this.fileService.list().subscribe({
       next: (files) => {
-        // Most recent first
-        this.files.set([...files].sort((a, b) => b.uploadDate.localeCompare(a.uploadDate)));
+        this.files.set(files);
         this.error.set(null);
         this.loading.set(false);
       },
