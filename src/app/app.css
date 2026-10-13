@@ -3,14 +3,16 @@
   top: 0;
   z-index: 10;
   gap: 1rem;
-  border-bottom: 1px solid #e5e7eb;
+  background: var(--app-gradient);
+  color: #fff;
+  box-shadow: 0 2px 12px var(--app-shadow);
 }
 
 .brand {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: inherit;
+  color: #fff;
   font-weight: 600;
   text-decoration: none;
 }
@@ -21,8 +23,17 @@
   margin-left: 1rem;
 }
 
-.nav a.active {
-  background: rgba(0, 0, 0, 0.08);
+.topbar .nav a {
+  color: #fff;
+}
+
+.topbar .nav a.active {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.topbar .signout {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.6);
 }
 
 .spacer {
@@ -36,11 +47,37 @@
   max-width: 960px;
   margin: 0 auto;
   padding: 1.5rem 1rem;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--mat-sys-outline-variant);
   color: #6b7280;
   font-size: 0.85rem;
 }
 
 .footer a {
   color: inherit;
+}
+
+/* Small screens: keep the bar on one line */
+@media (max-width: 600px) {
+  .topbar {
+    gap: 0.25rem;
+    padding: 0 0.5rem;
+  }
+
+  .brand-name,
+  .signout .label {
+    display: none;
+  }
+
+  .nav {
+    margin-left: 0;
+  }
+
+  .signout {
+    min-width: 0;
+    padding: 0 12px;
+  }
+
+  .signout mat-icon {
+    margin: 0;
+  }
 }

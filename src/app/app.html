@@ -1,7 +1,7 @@
 <mat-toolbar class="topbar">
-  <a routerLink="/" class="brand">
+  <a routerLink="/" class="brand" aria-label="CloudFile Processor home">
     <mat-icon>cloud</mat-icon>
-    <span>CloudFile Processor</span>
+    <span class="brand-name">CloudFile Processor</span>
   </a>
 
   <nav class="nav">
@@ -13,9 +13,9 @@
 
   <span class="spacer"></span>
 
-  <button mat-stroked-button type="button" (click)="logout()">
+  <button mat-stroked-button type="button" class="signout" (click)="logout()" aria-label="Sign out">
     <mat-icon>logout</mat-icon>
-    Sign out
+    <span class="label">Sign out</span>
   </button>
 </mat-toolbar>
 
