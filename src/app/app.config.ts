@@ -18,7 +18,7 @@ export const appConfig: ApplicationConfig = {
         authority: APP_CONFIG.cognitoAuthority,
         redirectUrl: window.location.origin + '/',
         postLogoutRedirectUri: window.location.origin + '/',
-        postLoginRoute: '/files',
+        postLoginRoute: '/',
         clientId: APP_CONFIG.clientId,
         scope: 'openid email profile',
         responseType: 'code',
