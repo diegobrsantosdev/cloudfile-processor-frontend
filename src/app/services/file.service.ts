@@ -14,7 +14,12 @@ export class FileService {
     return this.http.get<FileItem[]>(`${this.baseUrl}/files`);
   }
 
-   /** Asks the API for a temporary download link for a file. */
+  /** Every file the user ever uploaded, including deleted ones. */
+  history(): Observable<FileItem[]> {
+    return this.http.get<FileItem[]>(`${this.baseUrl}/files/history`);
+  }
+
+  /** Asks the API for a temporary download link for a file. */
   getDownloadUrl(fileId: string): Observable<string> {
     return this.http
       .get<FileDownloadResponse>(`${this.baseUrl}/files/${fileId}`)
