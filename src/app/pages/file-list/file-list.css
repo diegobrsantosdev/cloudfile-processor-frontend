@@ -157,6 +157,15 @@
   margin: 0;
 }
 
+/* Hint about sideways scrolling: only shown on small screens */
+.scroll-hint {
+  display: none;
+  margin: 0;
+  padding: 0.5rem 1rem;
+  color: #6b7280;
+  font-size: 0.8rem;
+}
+
 /* ---- Table ---- */
 .table-wrap {
   overflow-x: auto;
@@ -225,4 +234,50 @@ table {
 .failed { background: #fee2e2; color: #991b1b; }
 .deleted { background: #e5e7eb; color: #374151; }
 
+/* ---- Small screens ---- */
+@media (max-width: 600px) {
+  .panel-header {
+    padding: 0.85rem 1rem;
+  }
 
+  .search {
+    max-width: none;
+  }
+
+  .legend summary {
+    padding: 0.75rem 1rem;
+  }
+
+  .legend dl {
+    padding: 0 1rem 1rem;
+  }
+
+  /* Keep every column: the table scrolls sideways inside its card */
+  .scroll-hint {
+    display: block;
+  }
+
+  table {
+    min-width: 720px;
+  }
+
+  /* Gap between the scrollbar and the card edge, and a thicker rounded scrollbar */
+  .table-wrap {
+    margin-bottom: 0.75rem;
+  }
+
+  .table-wrap::-webkit-scrollbar {
+    height: 12px;
+  }
+
+  .table-wrap::-webkit-scrollbar-track {
+    margin: 0 1rem;
+    border-radius: 999px;
+    background: #e5e7eb;
+  }
+
+  .table-wrap::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    background: var(--mat-sys-primary);
+  }
+}
