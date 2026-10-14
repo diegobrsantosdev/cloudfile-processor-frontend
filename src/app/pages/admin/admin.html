@@ -1,0 +1,152 @@
+<main class="container">
+  <h1>Admin</h1>
+  <p class="subtitle">
+    Manage files across all users. Pick a user to see their files, then reprocess or delete them.
+  </p>
+
+  <div class="layout">
+    <section class="panel">
+      <header class="panel-header">
+        <h2>Users <span class="count">{{ users().length }}</span></h2>
+      </header>
+
+      @if (usersLoading()) {
+        <p class="note">Loading users...</p>
+      } @else if (usersError()) {
+        <div class="note">
+          <p class="error">We couldn't load the users.</p>
+          <button mat-stroked-button type="button" (click)="loadUsers()">Try again</button>
+        </div>
+      } @else if (users().length === 0) {
+        <p class="note">No users have uploaded files yet.</p>
+      } @else {
+        <ul class="user-list">
+          @for (userId of users(); track userId) {
+            <li>
+              <button
+                type="button"
+                class="user-item"
+                [class.active]="userId === selectedUser()"
+                [title]="userId"
+                (click)="selectUser(userId)"
+              >
+                <mat-icon>person</mat-icon>
+                <span>{{ shortId(userId) }}</span>
+              </button>
+            </li>
+          }
+        </ul>
+      }
+    </section>
+
+    <section class="panel">
+      <header class="panel-header">
+        <div>
+          <h2>
+            Files
+            @if (selectedUser()) {
+              <span class="count">{{ files().length }}</span>
+            }
+          </h2>
+          @if (selectedUser()) {
+            <p class="user-full">{{ selectedUser() }}</p>
+          }
+        </div>
+
+        @if (selectedUser()) {
+          <button
+            mat-icon-button
+            type="button"
+            aria-label="Refresh files"
+            matTooltip="Refresh"
+            [disabled]="filesLoading()"
+            (click)="loadFiles()"
+          >
+            <mat-icon>refresh</mat-icon>
+          </button>
+        }
+      </header>
+
+      @if (!selectedUser()) {
+        <p class="note">Select a user to see their files.</p>
+      } @else if (filesLoading()) {
+        <p class="note">Loading files...</p>
+      } @else if (filesError()) {
+        <div class="note">
+          <p class="error">We couldn't load this user's files.</p>
+          <button mat-stroked-button type="button" (click)="loadFiles()">Try again</button>
+        </div>
+      } @else {
+        <div class="table-wrap">
+          <table mat-table [dataSource]="rows()">
+            <ng-container matColumnDef="fileName">
+              <th mat-header-cell *matHeaderCellDef>Name</th>
+              <td mat-cell *matCellDef="let file" class="name-cell">
+                {{ file.fileName }}
+                <span class="name-meta">{{ file.uploadDate | date: 'MMM d, y, HH:mm' }}</span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef>Status</th>
+              <td mat-cell *matCellDef="let file">
+                <span [class]="'badge ' + file.status.toLowerCase()">{{ file.status }}</span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="fileSize">
+              <th mat-header-cell *matHeaderCellDef class="hide-sm">Size</th>
+              <td mat-cell *matCellDef="let file" class="hide-sm">{{ formatSize(file.fileSize) }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="uploadDate">
+              <th mat-header-cell *matHeaderCellDef class="hide-sm">Uploaded</th>
+              <td mat-cell *matCellDef="let file" class="hide-sm">
+                {{ file.uploadDate | date: 'MMM d, y, HH:mm' }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef class="actions-col">Actions</th>
+              <td mat-cell *matCellDef="let file" class="actions-col">
+                <div class="row-actions">
+                  <span [matTooltip]="reprocessHint(file)">
+                    <button
+                      mat-icon-button
+                      type="button"
+                      [attr.aria-label]="'Reprocess ' + file.fileName"
+                      [disabled]="!canReprocess(file) || busyId() === file.uploadId"
+                      (click)="confirmReprocess(file)"
+                    >
+                      <mat-icon>replay</mat-icon>
+                    </button>
+                  </span>
+
+                  <span [matTooltip]="deleteHint(file)">
+                    <button
+                      mat-icon-button
+                      type="button"
+                      class="delete-btn"
+                      [attr.aria-label]="'Delete ' + file.fileName"
+                      [disabled]="!canDelete(file) || busyId() === file.uploadId"
+                      (click)="confirmDelete(file)"
+                    >
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </span>
+                </div>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="columns"></tr>
+            <tr mat-row *matRowDef="let row; columns: columns"></tr>
+
+            <tr *matNoDataRow>
+              <td class="empty" [attr.colspan]="columns.length">This user has no files.</td>
+            </tr>
+          </table>
+        </div>
+      }
+    </section>
+  </div>
+</main>
