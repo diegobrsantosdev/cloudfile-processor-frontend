@@ -10,6 +10,9 @@
     </a>
     <a mat-button routerLink="/files" routerLinkActive="active">My files</a>
     <a mat-button routerLink="/history" routerLinkActive="active">History</a>
+    @if (isAdmin()) {
+      <a mat-button routerLink="/admin" routerLinkActive="active">Admin</a>
+    }
   </nav>
 
   <span class="spacer"></span>
