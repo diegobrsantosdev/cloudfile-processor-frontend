@@ -40,6 +40,7 @@
 
 /* Icon inside a tinted rounded square */
 .step-icon,
+.stat-icon,
 .highlight mat-icon {
   display: inline-flex;
   align-items: center;
@@ -66,6 +67,130 @@
   line-height: 1.5;
 }
 
+/* ---- Summary (dashboard) ---- */
+.summary {
+  margin-top: 2.5rem;
+}
+
+.summary h2 {
+  margin: 0 0 1rem;
+}
+
+.muted {
+  color: #6b7280;
+}
+
+.error {
+  color: #991b1b;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.stat-label {
+  color: #4b5563;
+  font-size: 0.9rem;
+}
+
+.stat-value {
+  color: var(--mat-sys-on-primary-container);
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.stat-hint {
+  color: #6b7280;
+  font-size: 0.8rem;
+}
+
+.recent-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 2rem 0 0.75rem;
+}
+
+.recent-header h3 {
+  margin: 0;
+}
+
+.recent-list {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  list-style: none;
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: 16px;
+  background: var(--mat-sys-surface);
+}
+
+.recent-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+}
+
+.recent-list li:last-child {
+  border-bottom: none;
+}
+
+.recent-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.recent-date {
+  color: #6b7280;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.empty-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+}
+
+.empty-card div {
+  flex: 1;
+  min-width: 200px;
+}
+
+.empty-card p {
+  margin: 0.25rem 0 0;
+  color: #4b5563;
+}
+
+.badge {
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.pending { background: #fef3c7; color: #92400e; }
+.processing { background: #dbeafe; color: #1e40af; }
+.completed { background: #d1fae5; color: #065f46; }
+.failed { background: #fee2e2; color: #991b1b; }
+.deleted { background: #e5e7eb; color: #374151; }
+
+/* ---- Highlights ---- */
 .highlights {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -83,4 +208,10 @@
   margin: 0.25rem 0 0;
   color: #4b5563;
   line-height: 1.5;
+}
+
+@media (max-width: 480px) {
+  .recent-date {
+    display: none;
+  }
 }

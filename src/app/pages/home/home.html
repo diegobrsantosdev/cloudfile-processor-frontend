@@ -26,6 +26,77 @@
     </div>
   </section>
 
+  <section class="summary">
+    <h2>Your summary</h2>
+
+    @if (loading()) {
+      <p class="muted">Loading your summary...</p>
+    } @else if (error()) {
+      <p class="error">
+        We couldn't load your summary right now. Try refreshing the page in a moment.
+      </p>
+    } @else if (files().length === 0) {
+      <mat-card appearance="outlined">
+        <mat-card-content class="empty-card">
+          <mat-icon class="stat-icon">cloud_upload</mat-icon>
+          <div>
+            <strong>You haven't uploaded anything yet.</strong>
+            <p>Send your first file and your storage and recent activity will show up here.</p>
+          </div>
+          <a mat-flat-button routerLink="/files">Upload your first file</a>
+        </mat-card-content>
+      </mat-card>
+    } @else {
+      <div class="stats">
+        <mat-card appearance="outlined">
+          <mat-card-content class="stat">
+            <mat-icon class="stat-icon">cloud</mat-icon>
+            <div>
+              <div class="stat-label">Storage used</div>
+              <div class="stat-value">{{ storageUsed() }}</div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card appearance="outlined">
+          <mat-card-content class="stat">
+            <mat-icon class="stat-icon">autorenew</mat-icon>
+            <div>
+              <div class="stat-label">In progress</div>
+              <div class="stat-value">{{ inProgress() }}</div>
+              <div class="stat-hint">Files being processed now</div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card appearance="outlined">
+          <mat-card-content class="stat">
+            <mat-icon class="stat-icon">event</mat-icon>
+            <div>
+              <div class="stat-label">Last upload</div>
+              <div class="stat-value">{{ lastUpload() | date: 'MMM d, y' }}</div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <div class="recent-header">
+        <h3>Recent uploads</h3>
+        <a routerLink="/files">View all</a>
+      </div>
+
+      <ul class="recent-list">
+        @for (file of recent(); track file.uploadId) {
+          <li>
+            <span class="recent-name">{{ file.fileName }}</span>
+            <span [class]="'badge ' + file.status.toLowerCase()">{{ file.status }}</span>
+            <span class="recent-date">{{ file.uploadDate | date: 'MMM d, HH:mm' }}</span>
+          </li>
+        }
+      </ul>
+    }
+  </section>
+
   <section class="highlights">
     @for (item of highlights; track item.title) {
       <div class="highlight">
