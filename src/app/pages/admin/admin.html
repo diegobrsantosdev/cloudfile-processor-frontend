@@ -14,7 +14,7 @@
         <p class="note">Loading users...</p>
       } @else if (usersError()) {
         <div class="note">
-          <p class="error">We couldn't load the users.</p>
+         <p class="error">{{ usersError() }}</p>
           <button mat-stroked-button type="button" (click)="loadUsers()">Try again</button>
         </div>
       } @else if (users().length === 0) {
@@ -73,7 +73,7 @@
         <p class="note">Loading files...</p>
       } @else if (filesError()) {
         <div class="note">
-          <p class="error">We couldn't load this user's files.</p>
+          <p class="error">{{ filesError() }}</p>
           <button mat-stroked-button type="button" (click)="loadFiles()">Try again</button>
         </div>
       } @else {

@@ -12,6 +12,7 @@ import {
 } from '../../components/confirm-dialog/confirm-dialog';
 import { FileItem } from '../../models/file-item';
 import { AdminService } from '../../services/admin.service';
+import { errorMessage } from '../../utils/api-error';
 import { formatSize } from '../../utils/format-size';
 
 @Component({
@@ -30,12 +31,12 @@ export class Admin implements OnInit {
 
   users = signal<string[]>([]);
   usersLoading = signal(true);
-  usersError = signal(false);
+  usersError = signal<string | null>(null);
 
   selectedUser = signal<string | null>(null);
   files = signal<FileItem[]>([]);
   filesLoading = signal(false);
-  filesError = signal(false);
+  filesError = signal<string | null>(null);
 
   // Id of the file with an action in progress
   busyId = signal<string | null>(null);
@@ -51,15 +52,15 @@ export class Admin implements OnInit {
 
   loadUsers(): void {
     this.usersLoading.set(true);
-    this.usersError.set(false);
+    this.usersError.set(null);
 
     this.adminService.listUsers().subscribe({
       next: (users) => {
         this.users.set(users);
         this.usersLoading.set(false);
       },
-      error: () => {
-        this.usersError.set(true);
+      error: (err) => {
+        this.usersError.set(errorMessage(err, "We couldn't load the users."));
         this.usersLoading.set(false);
       },
     });
@@ -77,7 +78,7 @@ export class Admin implements OnInit {
     }
 
     this.filesLoading.set(true);
-    this.filesError.set(false);
+    this.filesError.set(null);
 
     this.adminService.listUserFiles(userId).subscribe({
       next: (files) => {
@@ -87,9 +88,9 @@ export class Admin implements OnInit {
           this.filesLoading.set(false);
         }
       },
-      error: () => {
+      error: (err) => {
         if (this.selectedUser() === userId) {
-          this.filesError.set(true);
+          this.filesError.set(errorMessage(err, "We couldn't load this user's files."));
           this.filesLoading.set(false);
         }
       },
@@ -122,7 +123,7 @@ export class Admin implements OnInit {
   protected shortId(userId: string): string {
     return userId.length > 13 ? userId.slice(0, 8) + '…' : userId;
   }
-  
+
   protected canReprocess(file: FileItem): boolean {
     return file.status === 'FAILED';
   }
@@ -131,7 +132,7 @@ export class Admin implements OnInit {
     return file.status !== 'DELETED';
   }
 
-    protected reprocessHint(file: FileItem): string {
+  protected reprocessHint(file: FileItem): string {
     return this.canReprocess(file) ? 'Reprocess' : 'Only failed files can be reprocessed';
   }
 
@@ -161,11 +162,13 @@ export class Admin implements OnInit {
         });
         this.loadFiles();
       },
-      error: () => {
+      error: (err) => {
         this.busyId.set(null);
-        this.snackBar.open("We couldn't reprocess this file. Please try again.", 'OK', {
-          duration: 6000,
-        });
+        this.snackBar.open(
+          errorMessage(err, "We couldn't reprocess this file. Please try again."),
+          'OK',
+          { duration: 6000 },
+        );
       },
     });
   }
@@ -179,11 +182,13 @@ export class Admin implements OnInit {
         this.snackBar.open(`"${file.fileName}" was deleted.`, 'OK', { duration: 4000 });
         this.loadFiles();
       },
-      error: () => {
+      error: (err) => {
         this.busyId.set(null);
-        this.snackBar.open("We couldn't delete this file. Please try again.", 'OK', {
-          duration: 6000,
-        });
+        this.snackBar.open(
+          errorMessage(err, "We couldn't delete this file. Please try again."),
+          'OK',
+          { duration: 6000 },
+        );
       },
     });
   }
