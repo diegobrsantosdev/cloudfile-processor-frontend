@@ -18,6 +18,7 @@ import {
 import { UploadConfirmDialog } from '../../components/upload-confirm-dialog/upload-confirm-dialog';
 import { FileItem, FileStatus } from '../../models/file-item';
 import { FileService } from '../../services/file.service';
+import { errorMessage } from '../../utils/api-error';
 
 // Limit of a single upload to S3 (5 GiB). Larger files would need multipart upload.
 const MAX_FILE_SIZE = 5 * 1024 ** 3;
@@ -187,11 +188,13 @@ export class FileList implements OnInit {
         this.busyId.set(null);
         window.open(url, '_blank', 'noopener');
       },
-      error: () => {
+      error: (err) => {
         this.busyId.set(null);
-        this.snackBar.open("We couldn't prepare the download. Please try again.", 'OK', {
-          duration: 6000,
-        });
+        this.snackBar.open(
+          errorMessage(err, "We couldn't prepare the download. Please try again."),
+          'OK',
+          { duration: 6000 },
+        );
       },
     });
   }
@@ -267,11 +270,13 @@ export class FileList implements OnInit {
         this.pollingUntil = Date.now() + 60_000; // check the list for 60s
         this.loadFiles();
       },
-      error: () => {
+      error: (err) => {
         this.uploading.set(false);
-        this.snackBar.open('Upload failed. Check your connection and try again.', 'OK', {
-          duration: 6000,
-        });
+        this.snackBar.open(
+          errorMessage(err, 'Upload failed. Please try again.'),
+          'OK',
+          { duration: 6000 },
+        );
       },
     });
   }
@@ -285,11 +290,13 @@ export class FileList implements OnInit {
         this.files.update((list) => list.filter((f) => f.uploadId !== file.uploadId));
         this.snackBar.open(`"${file.fileName}" was deleted.`, 'OK', { duration: 4000 });
       },
-      error: () => {
+      error: (err) => {
         this.busyId.set(null);
-        this.snackBar.open("We couldn't delete this file. Please try again.", 'OK', {
-          duration: 6000,
-        });
+        this.snackBar.open(
+          errorMessage(err, "We couldn't delete this file. Please try again."),
+          'OK',
+          { duration: 6000 },
+        );
       },
     });
   }
@@ -301,8 +308,10 @@ export class FileList implements OnInit {
         this.error.set(null);
         this.loading.set(false);
       },
-      error: () => {
-        this.error.set("We couldn't load your files. Check your connection and try again.");
+      error: (err) => {
+        this.error.set(
+          errorMessage(err, "We couldn't load your files. Check your connection and try again."),
+        );
         this.loading.set(false);
       },
     });

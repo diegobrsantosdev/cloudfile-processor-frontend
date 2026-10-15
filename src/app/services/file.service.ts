@@ -4,6 +4,7 @@ import { map, Observable, switchMap } from 'rxjs';
 import { APP_CONFIG } from '../config/app-config';
 import { FileDownloadResponse, FileItem } from '../models/file-item';
 import { FileUploadRequest, FileUploadResponse } from '../models/file-upload';
+import { UploadError } from '../utils/api-error';
 
 @Injectable({ providedIn: 'root' })
 export class FileService {
@@ -66,12 +67,12 @@ export class FileService {
           subscriber.next(100);
           subscriber.complete();
         } else {
-          subscriber.error(new Error(`Upload failed with status ${xhr.status}`));
+          subscriber.error(new UploadError(xhr.status));
         }
       };
 
-      xhr.onerror = () => subscriber.error(new Error('Network error during upload'));
-      xhr.onabort = () => subscriber.error(new Error('Upload aborted'));
+      xhr.onerror = () => subscriber.error(new UploadError(0));
+      xhr.onabort = () => subscriber.error(new UploadError(0));
 
       xhr.send(file);
 

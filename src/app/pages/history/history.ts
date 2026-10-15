@@ -7,6 +7,7 @@ import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { FileItem, FileStatus } from '../../models/file-item';
 import { FileService } from '../../services/file.service';
+import { errorMessage } from '../../utils/api-error';
 
 const STATUS_HELP: Record<FileStatus, string> = {
   PENDING: 'Received and waiting in line to be processed.',
@@ -108,8 +109,10 @@ export class HistoryPage implements OnInit {
         this.error.set(null);
         this.loading.set(false);
       },
-      error: () => {
-        this.error.set("We couldn't load your history. Check your connection and try again.");
+      error: (err) => {
+        this.error.set(
+          errorMessage(err, "We couldn't load your history. Check your connection and try again."),
+        );
         this.loading.set(false);
       },
     });
