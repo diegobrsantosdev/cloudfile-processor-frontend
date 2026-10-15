@@ -109,23 +109,11 @@ Open http://localhost:4200.
 
 ### Configuration
 
-Edit `src/app/config/app-config.ts`:
+Cognito and API settings live in `src/app/config/app-config.ts`. To run it against your own AWS environment, replace those values and make sure that:
 
-```ts
-export const APP_CONFIG = {
-  cognitoDomain: 'https://<your-domain>.auth.<region>.amazoncognito.com',
-  cognitoAuthority: 'https://cognito-idp.<region>.amazonaws.com/<user-pool-id>',
-  clientId: '<app-client-id>',
-  apiBaseUrl: 'http://localhost:8080/api/v1',
-};
-```
-
-For everything to work you also need:
-
-- In the Cognito app client: `http://localhost:4200/` as an allowed **callback URL** and **sign-out URL**, the authorization code grant, and the `openid`, `email` and `profile` scopes.
-- In the backend: CORS allowing the `http://localhost:4200` origin, the `Authorization` and `Content-Type` headers, and the `GET`, `POST`, `DELETE` and `OPTIONS` methods.
-- In the S3 input bucket: a CORS rule allowing `PUT` from `http://localhost:4200`.
-- For the Admin area: put your user in a Cognito group named `ADMIN`.
+- the Cognito app client allows `http://localhost:4200/` as a callback and sign-out URL;
+- the backend and the S3 input bucket allow CORS requests from `http://localhost:4200`;
+- admin users belong to a Cognito group named `ADMIN`.
 
 ### Build
 
