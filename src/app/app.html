@@ -13,6 +13,7 @@
     @if (isAdmin()) {
       <a mat-button routerLink="/admin" routerLinkActive="active">Admin</a>
     }
+    <a mat-button routerLink="/support" routerLinkActive="active" class="support-link">Support</a>
   </nav>
 
   <span class="spacer"></span>
@@ -27,5 +28,8 @@
 
 <footer class="footer">
   <span>© {{ year }} CloudFile Processor</span>
-  <a routerLink="/about">How it's built</a>
+  <span class="footer-links">
+    <a routerLink="/support">Support</a>
+    <a routerLink="/about">How it's built</a>
+  </span>
 </footer>

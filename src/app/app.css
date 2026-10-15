@@ -52,11 +52,16 @@
   font-size: 0.85rem;
 }
 
+.footer-links {
+  display: flex;
+  gap: 1rem;
+}
+
 .footer a {
   color: inherit;
 }
 
-/* Small screens: keep the bar on one line */
+/* Small screens: keep the bar on one line, even with the Admin link */
 @media (max-width: 600px) {
   .topbar {
     gap: 0.25rem;
@@ -70,6 +75,17 @@
 
   .nav {
     margin-left: 0;
+    gap: 0;
+  }
+
+  .topbar .nav a {
+    min-width: 0;
+    padding: 0 10px;
+  }
+
+  /* Support stays available in the footer */
+  .topbar .nav a.support-link {
+    display: none;
   }
 
   .signout {
