@@ -1,0 +1,43 @@
+<main class="container">
+  <h1>Support</h1>
+  <p class="subtitle">
+    Find quick answers below. If you can't find what you need, send us a message and we'll get
+    back to you by email.
+  </p>
+
+  <h2>Frequently asked questions</h2>
+  <div class="faq">
+    @for (item of faqs; track item.question) {
+      <details class="faq-item">
+        <summary>
+          <span>{{ item.question }}</span>
+          <mat-icon class="chevron">expand_more</mat-icon>
+        </summary>
+        <p>{{ item.answer }}</p>
+      </details>
+    }
+  </div>
+
+  <mat-card appearance="outlined" class="contact-card">
+    <mat-card-content class="contact">
+      <mat-icon class="contact-icon">mail</mat-icon>
+      <div class="contact-text">
+        <h2>Contact us</h2>
+        <p>
+          Still need help? Write to {{ email }}. Please include the file name and what you were
+          doing when the problem happened.
+        </p>
+      </div>
+      <div class="contact-actions">
+        <a mat-flat-button [href]="mailto">
+          <mat-icon>send</mat-icon>
+          Email support
+        </a>
+        <button mat-stroked-button type="button" (click)="copyEmail()">
+          <mat-icon>content_copy</mat-icon>
+          Copy address
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</main>

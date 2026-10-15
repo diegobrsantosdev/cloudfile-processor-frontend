@@ -6,6 +6,7 @@ import { Admin } from './pages/admin/admin';
 import { FileList } from './pages/file-list/file-list';
 import { HistoryPage } from './pages/history/history';
 import { Home } from './pages/home/home';
+import { Support } from './pages/support/support';
 
 export const routes: Routes = [
   {
@@ -34,7 +35,12 @@ export const routes: Routes = [
     title: 'Admin · CloudFile Processor',
   },
   {
-    // Public page: no login required
+    // Public pages: no login required
+    path: 'support',
+    component: Support,
+    title: 'Support · CloudFile Processor',
+  },
+  {
     path: 'about',
     component: About,
     title: "How it's built · CloudFile Processor",
